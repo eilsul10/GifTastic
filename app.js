@@ -1,43 +1,24 @@
-// API KEY: hk5qrCpV27xPshZoggW6ZZ9xDaANGB9q
-// q, limit, rating
-// document.ready
-
-// function buildQueryURL() {
-//     // queryURL is the url we'll use to query the API
-//     var queryURL = "https://api.giphy.com/v1/gifs/search?q=";
-  
-//     // Begin building an object to contain our API call's query parameters
-//     // Set the API key
-//     var queryParams = { "api-key": "hk5qrCpV27xPshZoggW6ZZ9xDaANGB9q" };
-  
-//     // Grab text the user typed into the search input, add to the queryParams object
-//     queryParams.q = $("#add-comedian")
-//       .val()
-//       .trim();
-// }
-
-// DO NOT TOUCH BELOW
 
 var comedians =["Tina Fey", "Jimmy Kimmel", "Ali Wong", "Jerry Seinfeld", "Iliza Shlesinger", "George Carlin", "Michelle Wolf", "Conan O'Brien", "Amy Poehler", "Dave Chappelle"];
 
 // Function for displaying comedian buttons
 function showButtons() {
 
-  // Deleting the movie buttons prior to adding new movie buttons
+  // Deleting the buttons prior to adding new buttons
   // (this is necessary otherwise we will have repeat buttons)
   $("#comedian-view").empty();
 
-  // Looping through the array of movies
+  // Looping through the array of comedians
   for (var i = 0; i < comedians.length; i++) {
 
-    // Then dynamicaly generating buttons for each movie in the array.
+    // Then dynamicaly generating buttons for each comedian in the array.
     // This code $("<button>") is all jQuery needs to create the start and end tag. (<button></button>)
     var a = $("<button>");
     // Adding a class
     a.addClass("comedian");
-    // Adding a data-attribute with a value of the movie at index i
+    // Adding a data-attribute with a value of the comedian at index i
     a.attr("data-name", comedians[i]);
-    // Providing the button's context with a value of the movie at index i
+    // Providing the button's context with a value of the comedian at index i
     a.text(comedians[i]);
     // Adding the button to the HTML
     $("#comedian-view").append(a);
@@ -52,23 +33,24 @@ $("#add-comedian").on("click", function(event) {
 
   // This line will grab the text from the input box
   var comedian = $("#comedian-add").val().trim();
-  // The movie from the textbox is then added to our array
+  // The comedian from the textbox is then added to our array
   comedians.push(comedian);
 
-  // calling renderButtons which handles the processing of our movie array
+  // calling renderButtons which handles the processing of our comedian array
   showButtons();
 
   
 });
 
-// Calling the renderButtons function at least once to display the initial list of movies
+// Calling the renderButtons function at least once to display the initial list of comedians
 showButtons();
-
-// DO NOT TOUCH ABOVE
 
 function comedianbuttonClick () {
 
 $("button").on("click", function() {
+
+    $("#gifs-appear-here").empty();
+
     // In this case, the "this" keyword refers to the button that was clicked
     var person = $(this).attr('data-name');
 
@@ -101,18 +83,38 @@ $("button").on("click", function() {
             var p = $("<p>").text("Rating: " + rating);
 
             // Creating an image tag
-            var personImage = $("<img>");
+            let personImage = $("<img>");
+            personImage.css("width", "90%");
 
             // Giving the image tag an src attribute of a proprty pulled off the
             // result item
-            personImage.attr("src", results[i].images.fixed_height.url);
+            personImage.attr("src", results[i].images.original.url);
+            personImage.attr("animatedGif",results[i].images.original.url);
+            personImage.attr("pausedGif",results[i].images.original_still.url);
+
+            personImage.on("dblclick", function() {
+              if (personImage.attr("src") === personImage.attr("animatedGif")) {
+                  personImage.attr("src", personImage.attr("pausedGif"));
+              }
+
+              else {
+                personImage.attr("src",personImage.attr("animatedGif"));
+
+              }
+
+
+            });
 
             // Appending the paragraph and personImage we created to the "gifDiv" div we created
             gifDiv.append(p);
             gifDiv.append(personImage);
+            gifDiv.css("float", "left")
+            gifDiv.css("width", "33%");
+            gifDiv.css("padding", "5px");
 
             // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
             $("#gifs-appear-here").prepend(gifDiv);
+
           }
         }
       });
@@ -120,27 +122,6 @@ $("button").on("click", function() {
 
 }
 
-// comedianbuttonClick ();
-
-
-// function to pause the Gif
-// function pauseGif () {
-// $(".gif").on("click", function() {
-//     // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
-//     var state = $(this).attr("data-state");
-//     // If the clicked image's state is still, update its src attribute to what its data-animate value is.
-//     // Then, set the image's data-state to animate
-//     // Else set src to the data-still value
-//     if (state === "still") {
-//       $(this).attr("src", $(this).attr("data-animate"));
-//       $(this).attr("data-state", "animate");
-//     } else {
-//       $(this).attr("src", $(this).attr("data-still"));
-//       $(this).attr("data-state", "still");
-//     }
-//   });
-
-// }
 
 
   
